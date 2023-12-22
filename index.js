@@ -24,6 +24,7 @@ const client = new MongoClient(process.env.DB_URI, {
 async function run() {
   try {
     const usersCollection = client.db("TaskUnity").collection("users");
+    const tasksCollection = client.db("TaskUnity").collection("tasks");
 
     // Save or modify user email, status in Database
     app.put("/users", async (req, res) => {
@@ -39,6 +40,12 @@ async function run() {
             );
       res.send(result);
     });
+
+    app.post('/task', async(req, res)=>{
+      const item = req.body;
+      const result = await tasksCollection.insertOne(item);
+      res.send(result);
+    })
 
     // get all users
     app.get("/users", async (req, res) => {
